@@ -37,7 +37,7 @@ import java.util.UUID;
 
 public class StealthGhostArmor extends SimpleAdaptation<StealthGhostArmor.Config> {
     private static final UUID MODIFIER = UUID.nameUUIDFromBytes("adapt-ghost-armor".getBytes());
-    private static final NamespacedKey MODIFIER_KEY = NamespacedKey.fromString( "adapt:ghost-armor");
+    private static final NamespacedKey MODIFIER_KEY = NamespacedKey.fromString("adapt:ghost-armor");
 
     public StealthGhostArmor() {
         super("stealth-ghost-armor");
@@ -76,11 +76,11 @@ public class StealthGhostArmor extends SimpleAdaptation<StealthGhostArmor.Config
                 continue;
             }
             double oldArmor = attribute.getModifier(MODIFIER, MODIFIER_KEY)
-                            .stream()
-                            .mapToDouble(IAttribute.Modifier::getAmount)
-                            .filter(d -> !Double.isNaN(d))
-                            .max()
-                            .orElse(0);;
+                    .stream()
+                    .mapToDouble(IAttribute.Modifier::getAmount)
+                    .filter(d -> !Double.isNaN(d))
+                    .max()
+                    .orElse(0);
             double armor = getMaxArmorPoints(getLevelPercent(p));
             armor = Double.isNaN(armor) ? 0 : armor;
 
@@ -100,7 +100,7 @@ public class StealthGhostArmor extends SimpleAdaptation<StealthGhostArmor.Config
         if (e.getEntity() instanceof Player p && hasAdaptation(p) && !e.isCancelled() && e.getDamage() > 0) {
             // Check if 2.5 * e.getDamage() is greater than 10 if so just set it to 10 otherwise use the value of 2.5 * e.getDamage()
             int damageXP = (int) Math.min(10, 2.5 * e.getDamage());
-            xp(p,damageXP );
+            xp(p, damageXP);
             J.s(() -> {
                 var attribute = Version.get().getAttribute(p, Attributes.GENERIC_ARMOR);
                 if (attribute == null) return;
@@ -111,7 +111,7 @@ public class StealthGhostArmor extends SimpleAdaptation<StealthGhostArmor.Config
 
     @Override
     public boolean isEnabled() {
-        return getConfig().enabled;
+        return !getConfig().enabled;
     }
 
     @Override
@@ -121,15 +121,15 @@ public class StealthGhostArmor extends SimpleAdaptation<StealthGhostArmor.Config
 
     @NoArgsConstructor
     protected static class Config {
-        boolean permanent = false;
-        boolean enabled = true;
-        int baseCost = 3;
-        int maxArmor = 16;
-        int minArmor = 2;
-        int maxArmorPerTick = 3;
-        int minArmorPerTick = 1;
-        int initialCost = 1;
-        double costFactor = 0.335;
-        int maxLevel = 7;
+        final boolean permanent = false;
+        final boolean enabled = true;
+        final int baseCost = 3;
+        final int maxArmor = 16;
+        final int minArmor = 2;
+        final int maxArmorPerTick = 3;
+        final int minArmorPerTick = 1;
+        final int initialCost = 1;
+        final double costFactor = 0.335;
+        final int maxLevel = 7;
     }
 }

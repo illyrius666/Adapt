@@ -22,10 +22,8 @@ package com.volmit.adapt.util.decree.handlers;
 
 import com.volmit.adapt.util.collection.KList;
 import com.volmit.adapt.util.decree.DecreeParameterHandler;
-import com.volmit.adapt.util.decree.exceptions.DecreeParsingException;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Abstraction can sometimes breed stupidity
@@ -42,7 +40,7 @@ public class StringHandler implements DecreeParameterHandler<String> {
     }
 
     @Override
-    public String parse(String in, boolean force) throws DecreeParsingException {
+    public String parse(String in, boolean force) {
         return in;
     }
 

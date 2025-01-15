@@ -35,6 +35,7 @@ import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class AgilityWallJump extends SimpleAdaptation<AgilityWallJump.Config> {
     private final Map<Player, Double> airjumps;
@@ -79,7 +80,7 @@ public class AgilityWallJump extends SimpleAdaptation<AgilityWallJump.Config> {
             return;
         }
         Player p = e.getPlayer();
-        if (!canInteract(p, p.getLocation())) {
+        if (canInteract(p, p.getLocation())) {
             return;
         }
         if (airjumps.containsKey(p)) {
@@ -104,7 +105,7 @@ public class AgilityWallJump extends SimpleAdaptation<AgilityWallJump.Config> {
                 continue;
             }
 
-            if (!canInteract(p, p.getLocation())) {
+            if (canInteract(p, p.getLocation())) {
                 return;
             }
 
@@ -120,7 +121,7 @@ public class AgilityWallJump extends SimpleAdaptation<AgilityWallJump.Config> {
                         p.setVelocity(p.getVelocity().setY(getJumpHeight(level)));
                         if (getConfig().showParticles) {
 
-                            p.getWorld().spawnParticle(Particles.BLOCK_CRACK, p.getLocation().clone().add(0, 0.3, 0), 15, 0.1, 0.8, 0.1, 0.1, getStick(p).getBlockData());
+                            p.getWorld().spawnParticle(Particles.BLOCK_CRACK, p.getLocation().clone().add(0, 0.3, 0), 15, 0.1, 0.8, 0.1, 0.1, Objects.requireNonNull(getStick(p)).getBlockData());
                         }
                     }
                     airjumps.put(p, j);
@@ -140,7 +141,7 @@ public class AgilityWallJump extends SimpleAdaptation<AgilityWallJump.Config> {
                     spw.play(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 1f, 0.89f);
                     spw.play(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_CHAIN, 1f, 1.39f);
                     if (getConfig().showParticles && getStick(p) != null) {
-                        p.getWorld().spawnParticle(Particles.BLOCK_CRACK, p.getLocation().clone().add(0, 0.3, 0), 15, 0.1, 0.2, 0.1, 0.1, getStick(p).getBlockData());
+                        p.getWorld().spawnParticle(Particles.BLOCK_CRACK, p.getLocation().clone().add(0, 0.3, 0), 15, 0.1, 0.2, 0.1, 0.1, Objects.requireNonNull(getStick(p)).getBlockData());
                     }
                 }
 
@@ -211,7 +212,7 @@ public class AgilityWallJump extends SimpleAdaptation<AgilityWallJump.Config> {
 
     @Override
     public boolean isEnabled() {
-        return getConfig().enabled;
+        return !getConfig().enabled;
     }
 
     @Override
@@ -221,15 +222,15 @@ public class AgilityWallJump extends SimpleAdaptation<AgilityWallJump.Config> {
 
     @NoArgsConstructor
     protected static class Config {
-        boolean permanent = false;
-        boolean enabled = true;
-        boolean showParticles = true;
-        int baseCost = 2;
-        double costFactor = 0.65;
-        int maxLevel = 5;
-        int initialCost = 8;
-        double maxJumpsLevelBonusDivisor = 2;
-        double jumpHeightBase = 0.625;
-        double jumpHeightBonusLevelMultiplier = 0.225;
+        final boolean permanent = false;
+        final boolean enabled = true;
+        final boolean showParticles = true;
+        final int baseCost = 2;
+        final double costFactor = 0.65;
+        final int maxLevel = 5;
+        final int initialCost = 8;
+        final double maxJumpsLevelBonusDivisor = 2;
+        final double jumpHeightBase = 0.625;
+        final double jumpHeightBonusLevelMultiplier = 0.225;
     }
 }

@@ -18,6 +18,8 @@
 
 package com.volmit.adapt.util;
 
+import lombok.Getter;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -27,7 +29,17 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class JarScanner {
+    /**
+     * -- GETTER --
+     * Get the scanned clases
+     */
+    @Getter
     private final Set<Class<?>> classes;
+    /**
+     * -- GETTER --
+     * Get the file object for the jar
+     */
+    @Getter
     private final File jar;
     private final String superPackage;
 
@@ -74,21 +86,4 @@ public class JarScanner {
         zip.close();
     }
 
-    /**
-     * Get the scanned clases
-     *
-     * @return a gset of classes
-     */
-    public Set<Class<?>> getClasses() {
-        return classes;
-    }
-
-    /**
-     * Get the file object for the jar
-     *
-     * @return a file object representing the jar
-     */
-    public File getJar() {
-        return jar;
-    }
 }

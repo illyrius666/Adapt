@@ -77,7 +77,8 @@ public class HunterInvis extends SimpleAdaptation<HunterInvis.Config> {
                     addPotionStacks(p, PotionEffectType.INVISIBILITY, getLevel(p), getConfig().baseEffectbyLevel * getLevel(p), getConfig().stackBuff);
                 }
             } else {
-                if (getConfig().consumable != null && Material.getMaterial(getConfig().consumable) != null) {
+                getConfig();
+                if (Material.getMaterial(getConfig().consumable) != null) {
                     Material mat = Material.getMaterial(getConfig().consumable);
                     if (mat != null && p.getInventory().contains(mat)) {
                         p.getInventory().removeItem(new ItemStack(mat, 1));
@@ -99,7 +100,7 @@ public class HunterInvis extends SimpleAdaptation<HunterInvis.Config> {
 
     @Override
     public boolean isEnabled() {
-        return getConfig().enabled;
+        return !getConfig().enabled;
     }
 
     @Override
@@ -109,21 +110,21 @@ public class HunterInvis extends SimpleAdaptation<HunterInvis.Config> {
 
     @NoArgsConstructor
     protected static class Config {
-        boolean permanent = false;
-        boolean enabled = true;
-        boolean useConsumable = false;
-        boolean poisonPenalty = true;
-        boolean stackHungerPenalty = false;
-        boolean stackPoisonPenalty = false;
-        boolean stackBuff = false;
-        int baseEffectbyLevel = 100;
-        int baseHungerFromLevel = 10;
-        int baseHungerDuration = 50;
-        int basePoisonFromLevel = 6;
-        String consumable = "ROTTEN_FLESH";
-        int baseCost = 4;
-        int maxLevel = 5;
-        int initialCost = 8;
-        double costFactor = 0.4;
+        final boolean permanent = false;
+        final boolean enabled = true;
+        final boolean useConsumable = false;
+        final boolean poisonPenalty = true;
+        final boolean stackHungerPenalty = false;
+        final boolean stackPoisonPenalty = false;
+        final boolean stackBuff = false;
+        final int baseEffectbyLevel = 100;
+        final int baseHungerFromLevel = 10;
+        final int baseHungerDuration = 50;
+        final int basePoisonFromLevel = 6;
+        final String consumable = "ROTTEN_FLESH";
+        final int baseCost = 4;
+        final int maxLevel = 5;
+        final int initialCost = 8;
+        final double costFactor = 0.4;
     }
 }

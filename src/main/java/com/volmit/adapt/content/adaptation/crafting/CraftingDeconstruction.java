@@ -155,7 +155,7 @@ public class CraftingDeconstruction extends SimpleAdaptation<CraftingDeconstruct
 
             // Damage the shears
             Damageable damageable = (Damageable) mainHandItem.getItemMeta();
-            int newDamage = damageable.getDamage() + 8 * forStuff.getAmount();
+            int newDamage = Objects.requireNonNull(damageable).getDamage() + 8 * forStuff.getAmount();
             if (newDamage >= mainHandItem.getType().getMaxDurability()) {
                 player.getInventory().setItemInMainHand(null); // Break the shears
             } else {
@@ -175,7 +175,7 @@ public class CraftingDeconstruction extends SimpleAdaptation<CraftingDeconstruct
 
     @Override
     public boolean isEnabled() {
-        return getConfig().enabled;
+        return !getConfig().enabled;
     }
 
     @Override
@@ -185,10 +185,10 @@ public class CraftingDeconstruction extends SimpleAdaptation<CraftingDeconstruct
 
     @NoArgsConstructor
     protected static class Config {
-        boolean permanent = false;
-        boolean enabled = true;
-        int baseCost = 9;
-        int initialCost = 8;
-        double costFactor = 1.355;
+        final boolean permanent = false;
+        final boolean enabled = true;
+        final int baseCost = 9;
+        final int initialCost = 8;
+        final double costFactor = 1.355;
     }
 }

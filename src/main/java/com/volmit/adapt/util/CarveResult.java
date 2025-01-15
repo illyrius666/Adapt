@@ -18,13 +18,12 @@
 
 package com.volmit.adapt.util;
 
+import lombok.EqualsAndHashCode;
 import lombok.Value;
 
+@EqualsAndHashCode(callSuper = true)
 @Value
-public class CarveResult {
-    private final int surface;
-    private final int ceiling;
-
+public record CarveResult(int surface, int ceiling) {
     public int getHeight() {
         return ceiling - surface;
     }

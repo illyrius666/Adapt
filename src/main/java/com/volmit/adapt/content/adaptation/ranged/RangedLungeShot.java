@@ -32,6 +32,7 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class RangedLungeShot extends SimpleAdaptation<RangedLungeShot.Config> {
     private final List<Integer> holds = new ArrayList<>();
@@ -67,7 +68,7 @@ public class RangedLungeShot extends SimpleAdaptation<RangedLungeShot.Config> {
             if (e.getEntity() instanceof AbstractArrow a) {
                 if (hasAdaptation(p)) {
                     if (!p.isOnGround()) {
-                        Vector velocity = p.getPlayer().getLocation().getDirection().normalize().multiply(getSpeed(getLevelPercent(p)));
+                        Vector velocity = Objects.requireNonNull(p.getPlayer()).getLocation().getDirection().normalize().multiply(getSpeed(getLevelPercent(p)));
                         p.setVelocity(p.getVelocity().subtract(velocity));
                         SoundPlayer spw = SoundPlayer.of(p.getWorld());
                         spw.play(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_TURTLE, 1f, 0.75f);
@@ -93,7 +94,7 @@ public class RangedLungeShot extends SimpleAdaptation<RangedLungeShot.Config> {
 
     @Override
     public boolean isEnabled() {
-        return getConfig().enabled;
+        return !getConfig().enabled;
     }
 
     @Override
@@ -103,13 +104,13 @@ public class RangedLungeShot extends SimpleAdaptation<RangedLungeShot.Config> {
 
     @NoArgsConstructor
     protected static class Config {
-        boolean permanent = false;
-        boolean enabled = true;
-        boolean showParticles = true;
-        int baseCost = 3;
-        int maxLevel = 3;
-        int initialCost = 8;
-        double costFactor = 0.5;
-        double factor = 0.935;
+        final boolean permanent = false;
+        final boolean enabled = true;
+        final boolean showParticles = true;
+        final int baseCost = 3;
+        final int maxLevel = 3;
+        final int initialCost = 8;
+        final double costFactor = 0.5;
+        final double factor = 0.935;
     }
 }

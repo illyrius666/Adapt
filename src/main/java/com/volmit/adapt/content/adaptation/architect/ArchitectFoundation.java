@@ -37,10 +37,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ArchitectFoundation extends SimpleAdaptation<ArchitectFoundation.Config> {
     private static final BlockData AIR = Material.AIR.createBlockData();
@@ -86,10 +83,10 @@ public class ArchitectFoundation extends SimpleAdaptation<ArchitectFoundation.Co
         if (!hasAdaptation(p)) {
             return;
         }
-        if (!canBlockPlace(p, p.getLocation())) {
+        if (canBlockPlace(p, p.getLocation())) {
             return;
         }
-        if (!e.getFrom().getBlock().equals(e.getTo().getBlock())) {
+        if (!e.getFrom().getBlock().equals(Objects.requireNonNull(e.getTo()).getBlock())) {
             return;
         }
         if (!this.active.contains(p)) {
@@ -104,7 +101,7 @@ public class ArchitectFoundation extends SimpleAdaptation<ArchitectFoundation.Co
         Location l = e.getTo();
         World world = l.getWorld();
         Set<Block> locs = new HashSet<>();
-        locs.add(world.getBlockAt(l.clone().add(0.3, -1, -0.3)));
+        locs.add(Objects.requireNonNull(world).getBlockAt(l.clone().add(0.3, -1, -0.3)));
         locs.add(world.getBlockAt(l.clone().add(-0.3, -1, -0.3)));
         locs.add(world.getBlockAt(l.clone().add(0.3, -1, 0.3)));
         locs.add(world.getBlockAt(l.clone().add(-0.3, -1, +0.3)));
@@ -190,7 +187,7 @@ public class ArchitectFoundation extends SimpleAdaptation<ArchitectFoundation.Co
             return;
         }
 
-        boolean ready = !hasCooldown(p);
+        boolean ready = hasCooldown(p);
         boolean active = this.active.contains(p);
 
         if (e.isSneaking() && ready && !active) {
@@ -253,7 +250,7 @@ public class ArchitectFoundation extends SimpleAdaptation<ArchitectFoundation.Co
                 continue;
             }
 
-            boolean ready = !hasCooldown(i);
+            boolean ready = hasCooldown(i);
             int availablePower = getBlockPower(getLevelPercent(i));
             blockPower.compute(i, (k, v) -> {
                 if ((k == null || v == null) || (ready && v != availablePower)) {
@@ -281,12 +278,12 @@ public class ArchitectFoundation extends SimpleAdaptation<ArchitectFoundation.Co
             }
         }
 
-        return cooldowns.containsKey(i);
+        return !cooldowns.containsKey(i);
     }
 
     @Override
     public boolean isEnabled() {
-        return getConfig().enabled;
+        return !getConfig().enabled;
     }
 
     @Override
@@ -296,16 +293,16 @@ public class ArchitectFoundation extends SimpleAdaptation<ArchitectFoundation.Co
 
     @NoArgsConstructor
     protected static class Config {
+        public final int minBlocks = 9;
+        public final int maxBlocks = 35;
+        public final int cooldown = 5000;
+        final boolean permanent = false;
+        final boolean showParticles = true;
+        final boolean enabled = true;
+        final int baseCost = 5;
+        final int maxLevel = 5;
+        final int initialCost = 1;
+        final double costFactor = 0.40;
         public long duration = 3000;
-        public int minBlocks = 9;
-        public int maxBlocks = 35;
-        public int cooldown = 5000;
-        boolean permanent = false;
-        boolean showParticles = true;
-        boolean enabled = true;
-        int baseCost = 5;
-        int maxLevel = 5;
-        int initialCost = 1;
-        double costFactor = 0.40;
     }
 }

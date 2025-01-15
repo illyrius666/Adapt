@@ -21,9 +21,6 @@ package com.volmit.adapt.util.data;
 
 
 import art.arcane.chrono.ChronoLatch;
-//import com.volmit.react.React;
-//import com.volmit.react.util.collection.KList;
-//import com.volmit.react.util.collection.KMap;
 import com.volmit.adapt.Adapt;
 import com.volmit.adapt.util.collection.KList;
 import com.volmit.adapt.util.collection.KMap;
@@ -464,18 +461,16 @@ public class B {
         try {
             BlockData bx = null;
 
-            if (bx == null) {
-                try {
-                    bx = createBlockData(ix.toLowerCase());
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
+            try {
+                bx = createBlockData(ix.toLowerCase());
+            } catch (Throwable e) {
+                e.printStackTrace();
             }
 
             if (bx == null) {
                 try {
                     bx = createBlockData("minecraft:" + ix.toLowerCase());
-                } catch (Throwable e) {
+                } catch (Throwable ignored) {
 
                 }
             }
@@ -483,7 +478,7 @@ public class B {
             if (bx == null) {
                 try {
                     bx = Material.valueOf(ix.toUpperCase()).createBlockData();
-                } catch (Throwable e) {
+                } catch (Throwable ignored) {
 
                 }
             }
@@ -501,7 +496,7 @@ public class B {
             String block = ix.contains(":") ? ix.split(":")[1].toLowerCase() : ix.toLowerCase();
             String state = block.contains("[") ? block.split("\\Q[\\E")[1].split("\\Q]\\E")[0] : "";
             Map<String, String> stateMap = new HashMap<>();
-            if (!state.equals("")) {
+            if (!state.isEmpty()) {
                 Arrays.stream(state.split(",")).forEach(s -> stateMap.put(s.split("=")[0], s.split("=")[1]));
             }
             block = block.split("\\Q[\\E")[0];
@@ -537,7 +532,7 @@ public class B {
 
             //Combine all the "good" states again
             state = newStates.entrySet().stream().map(entry -> entry.getKey() + "=" + entry.getValue()).collect(Collectors.joining(","));
-            if (!state.equals("")) state = "[" + state + "]";
+            if (!state.isEmpty()) state = "[" + state + "]";
             String newBlock = block + state;
             Adapt.debug("Converting " + ix + " to " + newBlock);
 

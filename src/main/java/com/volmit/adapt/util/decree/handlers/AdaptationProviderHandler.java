@@ -3,7 +3,6 @@ package com.volmit.adapt.util.decree.handlers;
 import com.volmit.adapt.util.collection.KList;
 import com.volmit.adapt.util.decree.DecreeParameterHandler;
 import com.volmit.adapt.util.decree.context.AdaptationListingHandler;
-import com.volmit.adapt.util.decree.exceptions.DecreeParsingException;
 
 public class AdaptationProviderHandler implements DecreeParameterHandler<AdaptationListingHandler.AdaptationProvider> {
 
@@ -18,7 +17,7 @@ public class AdaptationProviderHandler implements DecreeParameterHandler<Adaptat
     }
 
     @Override
-    public AdaptationListingHandler.AdaptationProvider parse(String in, boolean force) throws DecreeParsingException {
+    public AdaptationListingHandler.AdaptationProvider parse(String in, boolean force) {
         return new AdaptationListingHandler.AdaptationProvider(in);
     }
 

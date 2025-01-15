@@ -50,10 +50,7 @@ import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static com.volmit.adapt.util.reflect.enums.Particles.ENCHANTMENT_TABLE;
@@ -129,15 +126,18 @@ public interface Component {
         ItemStack pants = inv.getLeggings();
         double armorValue = 0.0;
         if (helmet == null) armorValue = armorValue + 0.0;
-        else if (Bukkit.getServer().getPluginManager().getPlugin("MagicCosmetics") != null && MagicAPI.hasEquipCosmetic(player, CosmeticType.HAT)) {
-            armorValue = armorValue + 0;
-        } else if (helmet.getType() == Material.LEATHER_HELMET) armorValue = armorValue + 0.04;
-        else if (helmet.getType() == Material.GOLDEN_HELMET) armorValue = armorValue + 0.08;
-        else if (helmet.getType() == Material.TURTLE_HELMET) armorValue = armorValue + 0.08;
-        else if (helmet.getType() == Material.CHAINMAIL_HELMET) armorValue = armorValue + 0.08;
-        else if (helmet.getType() == Material.IRON_HELMET) armorValue = armorValue + 0.08;
-        else if (helmet.getType() == Material.DIAMOND_HELMET) armorValue = armorValue + 0.12;
-        else if (helmet.getType() == Material.NETHERITE_HELMET) armorValue = armorValue + 0.12;
+        else {
+            if (Bukkit.getServer().getPluginManager().getPlugin("MagicCosmetics") != null) {
+                MagicAPI.hasEquipCosmetic(player, CosmeticType.HAT);
+            }
+            if (helmet.getType() == Material.LEATHER_HELMET) armorValue = armorValue + 0.04;
+            else if (helmet.getType() == Material.GOLDEN_HELMET) armorValue = armorValue + 0.08;
+            else if (helmet.getType() == Material.TURTLE_HELMET) armorValue = armorValue + 0.08;
+            else if (helmet.getType() == Material.CHAINMAIL_HELMET) armorValue = armorValue + 0.08;
+            else if (helmet.getType() == Material.IRON_HELMET) armorValue = armorValue + 0.08;
+            else if (helmet.getType() == Material.DIAMOND_HELMET) armorValue = armorValue + 0.12;
+            else if (helmet.getType() == Material.NETHERITE_HELMET) armorValue = armorValue + 0.12;
+        }
         //
         if (boots == null) armorValue = armorValue + 0.0;
         else if (boots.getType() == Material.LEATHER_BOOTS) armorValue = armorValue + 0.04;
@@ -156,14 +156,17 @@ public interface Component {
         else if (pants.getType() == Material.NETHERITE_LEGGINGS) armorValue = armorValue + 0.24;
         //
         if (chest == null) armorValue = armorValue + 0.0;
-        else if (Bukkit.getServer().getPluginManager().getPlugin("MagicCosmetics") != null && MagicAPI.hasEquipCosmetic(player, CosmeticType.BAG)) {
-            armorValue = armorValue + 0;
-        } else if (chest.getType() == Material.LEATHER_CHESTPLATE) armorValue = armorValue + 0.12;
-        else if (chest.getType() == Material.GOLDEN_CHESTPLATE) armorValue = armorValue + 0.20;
-        else if (chest.getType() == Material.CHAINMAIL_CHESTPLATE) armorValue = armorValue + 0.20;
-        else if (chest.getType() == Material.IRON_CHESTPLATE) armorValue = armorValue + 0.24;
-        else if (chest.getType() == Material.DIAMOND_CHESTPLATE) armorValue = armorValue + 0.32;
-        else if (chest.getType() == Material.NETHERITE_CHESTPLATE) armorValue = armorValue + 0.32;
+        else {
+            if (Bukkit.getServer().getPluginManager().getPlugin("MagicCosmetics") != null) {
+                MagicAPI.hasEquipCosmetic(player, CosmeticType.BAG);
+            }
+            if (chest.getType() == Material.LEATHER_CHESTPLATE) armorValue = armorValue + 0.12;
+            else if (chest.getType() == Material.GOLDEN_CHESTPLATE) armorValue = armorValue + 0.20;
+            else if (chest.getType() == Material.CHAINMAIL_CHESTPLATE) armorValue = armorValue + 0.20;
+            else if (chest.getType() == Material.IRON_CHESTPLATE) armorValue = armorValue + 0.24;
+            else if (chest.getType() == Material.DIAMOND_CHESTPLATE) armorValue = armorValue + 0.32;
+            else if (chest.getType() == Material.NETHERITE_CHESTPLATE) armorValue = armorValue + 0.32;
+        }
         return armorValue;
     }
 
@@ -187,7 +190,7 @@ public interface Component {
             else if (LUCK == type) amplifier = l ? 1500 : 6000;
             else if (TURTLE_MASTER == type) amplifier = u ? l ? 100 : 400 : x ? l ? 200 : 800 : l ? 100 : 400;
 
-            return new PotionEffect(p.getBasePotionData().getType().getEffectType(), amplifier, p.getBasePotionData().isUpgraded() ? 1 : 0);
+            return new PotionEffect(Objects.requireNonNull(p.getBasePotionData().getType().getEffectType()), amplifier, p.getBasePotionData().isUpgraded() ? 1 : 0);
         }
 
         return null;
@@ -312,7 +315,7 @@ public interface Component {
                         double zCoord = Math.cos(j) * radius;
 
                         Location loc = particleLocation.clone().add(xCoord, yCoord, zCoord);
-                        world.spawnParticle(REDSTONE, loc, 0, 0, 0, 0, dustOptions);
+                        Objects.requireNonNull(world).spawnParticle(REDSTONE, loc, 0, 0, 0, 0, dustOptions);
                     }
                 }
 
@@ -361,7 +364,7 @@ public interface Component {
                         double zCoord = Math.cos(j) * radius;
 
                         Location loc = particleLocation.clone().add(xCoord, yCoord, zCoord);
-                        world.spawnParticle(REDSTONE, loc, 0, 0, 0, 0, dustOptions);
+                        Objects.requireNonNull(world).spawnParticle(REDSTONE, loc, 0, 0, 0, 0, dustOptions);
                     }
                 }
 
@@ -455,7 +458,7 @@ public interface Component {
                         double zCoord = currentRadius * Math.cos(phi);
 
                         Location loc = particleLocation.clone().add(xCoord, yCoord, zCoord);
-                        world.spawnParticle(REDSTONE, loc, 0, 0, 0, 0, dustOptions);
+                        Objects.requireNonNull(world).spawnParticle(REDSTONE, loc, 0, 0, 0, 0, dustOptions);
                     }
                 }
 
@@ -477,7 +480,7 @@ public interface Component {
             double z = range * Math.cos(phi);
 
             Location particleLocation = center.clone().add(x, y, z);
-            world.spawnParticle(REDSTONE, particleLocation, 0, 0, 0, 0, dustOptions);
+            Objects.requireNonNull(world).spawnParticle(REDSTONE, particleLocation, 0, 0, 0, 0, dustOptions);
         }
     }
 
@@ -501,7 +504,7 @@ public interface Component {
         double l = v.length();
         v.normalize();
         if (AdaptConfig.get().isUseEnchantmentTableParticleForActiveEffects()) {
-            from.getWorld().spawnParticle(ENCHANTMENT_TABLE, to, 1, 6, 6, 6, 0.6);
+            Objects.requireNonNull(from.getWorld()).spawnParticle(ENCHANTMENT_TABLE, to, 1, 6, 6, 6, 0.6);
         }
     }
 
@@ -510,7 +513,7 @@ public interface Component {
         double l = v.length();
         v.normalize();
         if (AdaptConfig.get().isUseEnchantmentTableParticleForActiveEffects()) {
-            from.getWorld().spawnParticle(particle, to, 1, 6, 6, 6, 0.6);
+            Objects.requireNonNull(from.getWorld()).spawnParticle(particle, to, 1, 6, 6, 6, 0.6);
         }
     }
 
@@ -542,11 +545,11 @@ public interface Component {
             Vector v = direction.multiply(i * d);
             l.add(v.getX(), v.getY(), v.getZ());
             if (operationPerPoint == null) {
-                start.getWorld().spawnParticle(particle, l, particleCount, offsetX, offsetY, offsetZ, extra, data, forceDisplay);
+                Objects.requireNonNull(start.getWorld()).spawnParticle(particle, l, particleCount, offsetX, offsetY, offsetZ, extra, data, forceDisplay);
                 continue;
             }
             if (operationPerPoint.test(l)) {
-                start.getWorld().spawnParticle(particle, l, particleCount, offsetX, offsetY, offsetZ, extra, data, forceDisplay);
+                Objects.requireNonNull(start.getWorld()).spawnParticle(particle, l, particleCount, offsetX, offsetY, offsetZ, extra, data, forceDisplay);
             }
         }
     }
@@ -559,12 +562,12 @@ public interface Component {
 
         for (int i = 0; i < particleCount; i++) {
             Location particleLocation = start.clone().add(direction.clone().multiply(i * step));
-            world.spawnParticle(particle, particleLocation, 1);
+            Objects.requireNonNull(world).spawnParticle(particle, particleLocation, 1);
         }
     }
 
 
-    private List<Location> getHollowCuboid(Location loc, double particleDistance) {
+    private List<Location> getHollowCuboid(Location loc) {
         List<Location> result = Lists.newArrayList();
         World world = loc.getWorld();
         double minX = loc.getBlockX();
@@ -574,9 +577,9 @@ public interface Component {
         double maxY = loc.getBlockY() + 1;
         double maxZ = loc.getBlockZ() + 1;
 
-        for (double x = minX; x <= maxX; x += particleDistance) {
-            for (double y = minY; y <= maxY; y += particleDistance) {
-                for (double z = minZ; z <= maxZ; z += particleDistance) {
+        for (double x = minX; x <= maxX; x += 0.25) {
+            for (double y = minY; y <= maxY; y += 0.25) {
+                for (double z = minZ; z <= maxZ; z += 0.25) {
                     int components = 0;
                     if (x == minX || x == maxX) components++;
                     if (y == minY || y == maxY) components++;
@@ -590,7 +593,7 @@ public interface Component {
         return result;
     }
 
-    private List<Location> getHollowCuboid(Location loc, Location loc2, double particleDistance) {
+    private List<Location> getHollowCuboid(Location loc, Location loc2) {
         List<Location> result = Lists.newArrayList();
         World world = loc.getWorld();
 
@@ -601,9 +604,9 @@ public interface Component {
         double maxY = loc2.getBlockY() + 1;
         double maxZ = loc2.getBlockZ() + 1;
 
-        for (double x = minX; x <= maxX; x += particleDistance) {
-            for (double y = minY; y <= maxY; y += particleDistance) {
-                for (double z = minZ; z <= maxZ; z += particleDistance) {
+        for (double x = minX; x <= maxX; x += 0.25) {
+            for (double y = minY; y <= maxY; y += 0.25) {
+                for (double z = minZ; z <= maxZ; z += 0.25) {
                     int components = 0;
                     if (x == minX || x == maxX) components++;
                     if (y == minY || y == maxY) components++;
@@ -618,21 +621,21 @@ public interface Component {
     }
 
     default void vfxCuboidOutline(Block block, Particle particle) {
-        List<Location> hollowCube = getHollowCuboid(block.getLocation(), 0.25);
+        List<Location> hollowCube = getHollowCuboid(block.getLocation());
         for (Location l : hollowCube) {
             block.getWorld().spawnParticle(particle, l, 1, 0F, 0F, 0F, 0.000);
         }
     }
 
     default void vfxCuboidOutline(Block blockStart, Block blockEnd, Particle particle) {
-        List<Location> hollowCube = getHollowCuboid(blockStart.getLocation(), blockEnd.getLocation(), 0.25);
+        List<Location> hollowCube = getHollowCuboid(blockStart.getLocation(), blockEnd.getLocation());
         for (Location l : hollowCube) {
             blockStart.getWorld().spawnParticle(particle, l, 2, 0F, 0F, 0F, 0.000);
         }
     }
 
     default void vfxCuboidOutline(Block blockStart, Block blockEnd, Color color, int size) {
-        List<Location> hollowCube = getHollowCuboid(blockStart.getLocation(), blockEnd.getLocation(), 0.25);
+        List<Location> hollowCube = getHollowCuboid(blockStart.getLocation(), blockEnd.getLocation());
         Particle.DustOptions dustOptions = new Particle.DustOptions(color, size);
         for (Location l : hollowCube) {
             blockStart.getWorld().spawnParticle(REDSTONE, l, 2, 0F, 0F, 0F, 0.000, dustOptions);
@@ -675,7 +678,7 @@ public interface Component {
             z = z / magnitude * range;
 
             Location particleLocation = center.clone().add(x, y, z);
-            world.spawnParticle(REDSTONE, particleLocation, 0, 0, 0, 0, dustOptions);
+            Objects.requireNonNull(world).spawnParticle(REDSTONE, particleLocation, 0, 0, 0, 0, dustOptions);
         }
     }
 
@@ -696,7 +699,7 @@ public interface Component {
                 double x = radius * Math.cos(angle);
                 double z = radius * Math.sin(angle);
                 Location particleLocation = center.clone().add(x, 0, z);
-                world.spawnParticle(REDSTONE, particleLocation, particleCount, 0, 0, 0, dustOptions);
+                Objects.requireNonNull(world).spawnParticle(REDSTONE, particleLocation, particleCount, 0, 0, 0, dustOptions);
 
                 tick++;
             }
@@ -719,7 +722,7 @@ public interface Component {
                 double x = radius * Math.cos(angle);
                 double z = radius * Math.sin(angle);
                 Location particleLocation = center.clone().add(x, 0, z);
-                world.spawnParticle(particle, particleLocation, particleCount, 0, 0, 0);
+                Objects.requireNonNull(world).spawnParticle(particle, particleLocation, particleCount, 0, 0, 0);
 
                 tick++;
             }
@@ -736,7 +739,7 @@ public interface Component {
             Location particleLoc = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ());
             particleLoc.setX(location.getX() + Math.cos(d) * radius);
             particleLoc.setZ(location.getZ() + Math.sin(d) * radius);
-            location.getWorld().spawnParticle(REDSTONE, particleLoc, 1, new Particle.DustOptions(color, 1));
+            Objects.requireNonNull(location.getWorld()).spawnParticle(REDSTONE, particleLoc, 1, new Particle.DustOptions(color, 1));
         }
     }
 
@@ -745,7 +748,7 @@ public interface Component {
             Location particleLoc = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ());
             particleLoc.setX(location.getX() + Math.cos(d) * radius);
             particleLoc.setZ(location.getZ() + Math.sin(d) * radius);
-            location.getWorld().spawnParticle(particle, particleLoc, 1);
+            Objects.requireNonNull(location.getWorld()).spawnParticle(particle, particleLoc, 1);
         }
     }
 
@@ -754,7 +757,7 @@ public interface Component {
             Location particleLoc = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ());
             particleLoc.setX(location.getX() + Math.cos(d) * radius);
             particleLoc.setZ(location.getZ() + Math.sin(d) * radius);
-            location.getWorld().spawnParticle(particle, particleLoc, 1);
+            Objects.requireNonNull(location.getWorld()).spawnParticle(particle, particleLoc, 1);
         }
     }
 
@@ -771,7 +774,7 @@ public interface Component {
         for (int i = 0; i <= height; i++) {
             double x = center.getX() + (radius * Math.cos(angle));
             double z = center.getZ() + (radius * Math.sin(angle));
-            center.getWorld().spawnParticle(type, x, +center.getY(), z, 1, 0, 0, 0, 0);
+            Objects.requireNonNull(center.getWorld()).spawnParticle(type, x, +center.getY(), z, 1, 0, 0, 0, 0);
             angle += 0.1;
         }
     }
@@ -785,7 +788,7 @@ public interface Component {
 
     default void vfxXP(Location l) {
         if (AdaptConfig.get().isUseEnchantmentTableParticleForActiveEffects()) {
-            l.getWorld().spawnParticle(ENCHANTMENT_TABLE, l.add(0, 1.7, 0), 3, 0.1, 0.1, 0.1, 3);
+            Objects.requireNonNull(l.getWorld()).spawnParticle(ENCHANTMENT_TABLE, l.add(0, 1.7, 0), 3, 0.1, 0.1, 0.1, 3);
         }
     }
 

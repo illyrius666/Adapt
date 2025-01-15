@@ -68,6 +68,36 @@ public class UIWindow implements Window, Listener {
         setViewportPosition(0);
     }
 
+    private static Inventory createInventory(UIWindow window) {
+        var holder = new Holder();
+        Inventory inventory;
+        if (window.getResolution().getType().equals(InventoryType.CHEST)) {
+            inventory = Bukkit.createInventory(holder, window.getViewportHeight() * 9, window.getTitle());
+        } else {
+            inventory = Bukkit.createInventory(holder, window.getResolution().getType(), window.getTitle());
+        }
+        holder.setResolution(window.getResolution());
+        holder.setInventory(inventory);
+        holder.setWindow(window);
+
+        window.viewer.openInventory(inventory);
+        return inventory;
+    }
+
+    private static Inventory getCurrentInventory(UIWindow window, Holder holder) {
+        if (!Version.SET_TITLE || holder.getResolution() != window.getResolution()) {
+            holder.window.close();
+            return createInventory(window);
+        }
+
+        var openInventory = holder.inventory;
+        holder.unregister();
+        holder.setWindow(window);
+
+        openInventory.clear();
+        return openInventory;
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void on(InventoryClickEvent e) {
         if (!e.getWhoClicked().equals(viewer)) {
@@ -193,9 +223,8 @@ public class UIWindow implements Window, Listener {
     }
 
     @Override
-    public UIWindow setDecorator(WindowDecorator decorator) {
+    public void setDecorator(WindowDecorator decorator) {
         this.decorator = decorator;
-        return this;
     }
 
     @Override
@@ -290,14 +319,13 @@ public class UIWindow implements Window, Listener {
     }
 
     @Override
-    public UIWindow setTitle(String title) {
+    public void setTitle(String title) {
         this.title = title;
 
         if (isVisible()) {
             reopen();
         }
 
-        return this;
     }
 
     @Override
@@ -311,14 +339,13 @@ public class UIWindow implements Window, Listener {
     }
 
     @Override
-    public UIWindow setElement(int position, int row, Element e) {
+    public void setElement(int position, int row, Element e) {
         if (row > highestRow) {
             highestRow = row;
         }
 
         elements.put(getRealPosition((int) clip(position, -getResolution().getMaxWidthOffset(), getResolution().getMaxWidthOffset()).doubleValue(), row), e);
         updateInventory();
-        return this;
     }
 
     @Override
@@ -332,9 +359,8 @@ public class UIWindow implements Window, Listener {
     }
 
     @Override
-    public UIWindow onClosed(Callback<Window> window) {
+    public void onClosed(Callback<Window> window) {
         eClose = window;
-        return this;
     }
 
     @Override
@@ -391,16 +417,15 @@ public class UIWindow implements Window, Listener {
         return resolution;
     }
 
-    public Double clip(double value, double min, double max) {
-        return Math.min(max, Math.max(min, value));
-    }
-
     @Override
-    public Window setResolution(WindowResolution resolution) {
+    public void setResolution(WindowResolution resolution) {
         close();
         this.resolution = resolution;
         setViewportHeight((int) clip(getViewportHeight(), 1, getResolution().getMaxHeight()).doubleValue());
-        return this;
+    }
+
+    public Double clip(double value, double min, double max) {
+        return Math.min(max, Math.max(min, value));
     }
 
     @Override
@@ -432,7 +457,7 @@ public class UIWindow implements Window, Listener {
                     isf.add(gg);
                 }
 
-                if (((isc == null) != (isx == null)) || isx != null && isc != null && !isc.equals(isx)) {
+                if ((isc == null) != (isx == null) || isx != null && !isc.equals(isx)) {
                     inventory.setItem(i, isx);
                 }
             }
@@ -475,35 +500,5 @@ public class UIWindow implements Window, Listener {
             HandlerList.unregisterAll(window);
             window.visible = false;
         }
-    }
-
-    private static Inventory createInventory(UIWindow window) {
-        var holder = new Holder();
-        Inventory inventory;
-        if (window.getResolution().getType().equals(InventoryType.CHEST)) {
-            inventory = Bukkit.createInventory(holder, window.getViewportHeight() * 9, window.getTitle());
-        } else {
-            inventory = Bukkit.createInventory(holder, window.getResolution().getType(), window.getTitle());
-        }
-        holder.setResolution(window.getResolution());
-        holder.setInventory(inventory);
-        holder.setWindow(window);
-
-        window.viewer.openInventory(inventory);
-        return inventory;
-    }
-
-    private static Inventory getCurrentInventory(UIWindow window, Holder holder) {
-        if (!Version.SET_TITLE || holder.getResolution() != window.getResolution()) {
-            holder.window.close();
-            return createInventory(window);
-        }
-
-        var openInventory = holder.inventory;
-        holder.unregister();
-        holder.setWindow(window);
-
-        openInventory.clear();
-        return openInventory;
     }
 }

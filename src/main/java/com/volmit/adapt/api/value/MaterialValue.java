@@ -161,7 +161,7 @@ public class MaterialValue {
                 }
                 d.add(vx / i.getOutput().getAmount());
             }
-            if (d.size() > 0) {
+            if (!d.isEmpty()) {
                 v += d.stream().mapToDouble(i -> i).average().getAsDouble();
             }
             if (v > AdaptConfig.get().getMaxRecipeListPrecaution()) {
@@ -188,7 +188,7 @@ public class MaterialValue {
             }
             Bukkit.getRecipesFor(is).forEach(i -> {
                 if (i instanceof AdaptRecipe) {
-                    Adapt.verbose("Skipping Adapt Recipe to prevent duplicates, " + mat.name() + " -> " + ((AdaptRecipe) i).getKey() + "");
+                    Adapt.verbose("Skipping Adapt Recipe to prevent duplicates, " + mat.name() + " -> " + ((AdaptRecipe) i).getKey());
                     return;
                 }
                 MaterialRecipe rx = toMaterial(i);

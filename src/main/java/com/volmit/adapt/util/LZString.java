@@ -24,12 +24,12 @@ public class LZString {
 
     private static final char[] keyStrBase64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".toCharArray();
     private static final char[] keyStrUriSafe = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-$".toCharArray();
-    private static final Map<char[], Map<Character, Integer>> baseReverseDic = new HashMap<char[], Map<Character, Integer>>();
+    private static final Map<char[], Map<Character, Integer>> baseReverseDic = new HashMap<>();
 
     private static char getBaseValue(char[] alphabet, Character character) {
         Map<Character, Integer> map = baseReverseDic.get(alphabet);
         if (map == null) {
-            map = new HashMap<Character, Integer>();
+            map = new HashMap<>();
             baseReverseDic.put(alphabet, map);
             for (int i = 0; i < alphabet.length; i++) {
                 map.put(alphabet[i], i);
@@ -47,23 +47,19 @@ public class LZString {
                 return keyStrBase64[a];
             }
         });
-        switch (res.length() % 4) { // To produce valid Base64
-            default: // When could this happen ?
-            case 0:
-                return res;
-            case 1:
-                return res + "===";
-            case 2:
-                return res + "==";
-            case 3:
-                return res + "=";
-        }
+        return switch (res.length() % 4) { // To produce valid Base64
+            // When could this happen ?
+            case 1 -> res + "===";
+            case 2 -> res + "==";
+            case 3 -> res + "=";
+            default -> res;
+        };
     }
 
     public static String decompressFromBase64(final String inputStr) {
         if (inputStr == null)
             return "";
-        if (inputStr.equals(""))
+        if (inputStr.isEmpty())
             return null;
         return LZString._decompress(inputStr.length(), 32, new DecompressFunctionWrapper() {
             @Override
@@ -134,10 +130,10 @@ public class LZString {
     private static String _compress(String uncompressedStr, int bitsPerChar, CompressFunctionWrapper getCharFromInt) {
         if (uncompressedStr == null) return "";
         int i, value;
-        Map<String, Integer> context_dictionary = new HashMap<String, Integer>();
-        Set<String> context_dictionaryToCreate = new HashSet<String>();
-        String context_c = "";
-        String context_wc = "";
+        Map<String, Integer> context_dictionary = new HashMap<>();
+        Set<String> context_dictionaryToCreate = new HashSet<>();
+        String context_c;
+        String context_wc;
         String context_w = "";
         int context_enlargeIn = 2; // Compensate for the first entry which should not count
         int context_dictSize = 3;
@@ -315,7 +311,6 @@ public class LZString {
             }
             context_enlargeIn--;
             if (context_enlargeIn == 0) {
-                context_enlargeIn = powerOf2(context_numBits);
                 context_numBits++;
             }
         }
@@ -368,14 +363,14 @@ public class LZString {
     }
 
     private static String _decompress(int length, int resetValue, DecompressFunctionWrapper getNextValue) {
-        List<String> dictionary = new ArrayList<String>();
+        List<String> dictionary = new ArrayList<>();
         // TODO: is next an unused variable in original lz-string?
         @SuppressWarnings("unused")
         int next;
         int enlargeIn = 4;
         int dictSize = 4;
         int numBits = 3;
-        String entry = "";
+        String entry;
         StringBuilder result = new StringBuilder();
         String w;
         int bits, resb;
@@ -404,9 +399,8 @@ public class LZString {
             power <<= 1;
         }
 
-        switch (next = bits) {
+        switch (bits) {
             case 0:
-                bits = 0;
                 maxpower = powerOf2(8);
                 power = 1;
                 while (power != maxpower) {
@@ -465,7 +459,6 @@ public class LZString {
             int cc;
             switch (cc = bits) {
                 case 0:
-                    bits = 0;
                     maxpower = powerOf2(8);
                     power = 1;
                     while (power != maxpower) {

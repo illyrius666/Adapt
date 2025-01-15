@@ -21,10 +21,9 @@ package com.volmit.adapt.util.data;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 
 public interface IOAdapter<T> {
-    void write(T t, DataOutputStream dos) throws IOException;
+    void write(T t, DataOutputStream dos);
 
-    T read(DataInputStream din) throws IOException;
+    T read(DataInputStream din);
 }

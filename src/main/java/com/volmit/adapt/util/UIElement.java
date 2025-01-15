@@ -65,7 +65,7 @@ public class UIElement implements Element {
     }
 
     public Double clip(double value, double min, double max) {
-        return Double.valueOf(Math.min(max, Math.max(min, value)));
+        return Math.min(max, Math.max(min, value));
     }
 
     @Override
@@ -148,35 +148,33 @@ public class UIElement implements Element {
     }
 
     @Override
-    public Element call(ElementEvent event, Element context) {
+    public void call(ElementEvent event, Element context) {
         try {
             switch (event) {
                 case DRAG_INTO:
                     eDraggedInto.run(context);
-                    return this;
+                    return;
                 case LEFT:
                     eLeft.run(context);
-                    return this;
+                    return;
                 case OTHER_DRAG_INTO:
                     eOtherDraggedInto.run(context);
-                    return this;
+                    return;
                 case RIGHT:
                     eRight.run(context);
-                    return this;
+                    return;
                 case SHIFT_LEFT:
                     eShiftLeft.run(context);
-                    return this;
+                    return;
                 case SHIFT_RIGHT:
                     eShiftRight.run(context);
-                    return this;
             }
-        } catch (NullPointerException e) {
+        } catch (NullPointerException ignored) {
 
         } catch (Throwable e) {
             e.printStackTrace();
         }
 
-        return this;
     }
 
     @Override

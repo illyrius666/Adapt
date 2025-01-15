@@ -21,9 +21,6 @@ package com.volmit.adapt.util.decree.specialhandlers;
 
 import com.volmit.adapt.util.collection.KList;
 import com.volmit.adapt.util.decree.DecreeParameterHandler;
-import com.volmit.adapt.util.decree.exceptions.DecreeParsingException;
-
-import java.util.List;
 
 public class DummyHandler implements DecreeParameterHandler<Object> {
     @Override
@@ -41,7 +38,7 @@ public class DummyHandler implements DecreeParameterHandler<Object> {
     }
 
     @Override
-    public Object parse(String in, boolean force) throws DecreeParsingException {
+    public Object parse(String in, boolean force) {
         return null;
     }
 

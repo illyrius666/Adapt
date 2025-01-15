@@ -26,6 +26,7 @@ import com.volmit.adapt.api.protection.Protector;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class GriefDefenderProtector implements Protector {
@@ -33,11 +34,10 @@ public class GriefDefenderProtector implements Protector {
      * This api is garbage, and obfuscated.
      * If i can get a jar ill improve it, but for now this is the best i can do.
      * Or if someone wants to make a PR feel free.
-     *
+     * <p>
      * I as an author do not support this api, and do not recommend it,
      * as they are making ME pay $15(spigot) + $5(patreon) per month to be
      * able to ask questions in their discord, and get unobfuscated jars.
-     *
      */
 
     @Override
@@ -50,7 +50,7 @@ public class GriefDefenderProtector implements Protector {
     public boolean canPVP(Player player, Location entityLocation, Adaptation<?> adaptation) {
         final Claim claim = GriefDefender.getCore().getClaimAt(entityLocation);
         if (checkPerm(player, claim, adaptation)) {
-            return claim.isPvpAllowed();
+            return Objects.requireNonNull(claim).isPvpAllowed();
         }
         return false;
     }

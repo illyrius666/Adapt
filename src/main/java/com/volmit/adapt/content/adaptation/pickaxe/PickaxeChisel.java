@@ -33,6 +33,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Objects;
+
 public class PickaxeChisel extends SimpleAdaptation<PickaxeChisel.Config> {
     public PickaxeChisel() {
         super("pickaxe-chisel");
@@ -93,7 +95,7 @@ public class PickaxeChisel extends SimpleAdaptation<PickaxeChisel.Config> {
                 p.setCooldown(p.getInventory().getItemInMainHand().getType(), getCooldownTime(getLevelPercent(p)));
                 damageHand(p, getDamagePerBlock(getLevelPercent(p)));
 
-                Location c = p.rayTraceBlocks(8).getHitPosition().toLocation(p.getWorld());
+                Location c = Objects.requireNonNull(p.rayTraceBlocks(8)).getHitPosition().toLocation(p.getWorld());
 
                 ItemStack is = getDropFor(b);
                 if (M.r(getDropChance(getLevelPercent(p)))) {
@@ -143,7 +145,7 @@ public class PickaxeChisel extends SimpleAdaptation<PickaxeChisel.Config> {
 
     @Override
     public boolean isEnabled() {
-        return getConfig().enabled;
+        return !getConfig().enabled;
     }
 
     @Override
@@ -153,18 +155,18 @@ public class PickaxeChisel extends SimpleAdaptation<PickaxeChisel.Config> {
 
     @NoArgsConstructor
     protected static class Config {
-        boolean permanent = false;
-        boolean enabled = true;
-        boolean showParticles = true;
-        int baseCost = 6;
-        int maxLevel = 7;
-        int initialCost = 5;
-        double costFactor = 0.4;
-        int cooldownTime = 5;
-        double dropChanceBase = 0.07;
-        double dropChanceFactor = 0.22;
-        double breakChance = 0.25;
-        double damagePerBlockBase = 1;
-        double damageFactorInverseMultiplier = 2;
+        final boolean permanent = false;
+        final boolean enabled = true;
+        final boolean showParticles = true;
+        final int baseCost = 6;
+        final int maxLevel = 7;
+        final int initialCost = 5;
+        final double costFactor = 0.4;
+        final int cooldownTime = 5;
+        final double dropChanceBase = 0.07;
+        final double dropChanceFactor = 0.22;
+        final double breakChance = 0.25;
+        final double damagePerBlockBase = 1;
+        final double damageFactorInverseMultiplier = 2;
     }
 }

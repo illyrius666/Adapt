@@ -35,16 +35,12 @@ import java.util.List;
  */
 public class VectorMath {
     public static Vector scaleStatic(Axis x, Vector v, double amt) {
-        switch (x) {
-            case X:
-                return scaleX(v, amt);
-            case Y:
-                return scaleY(v, amt);
-            case Z:
-                return scaleZ(v, amt);
-        }
+        return switch (x) {
+            case X -> scaleX(v, amt);
+            case Y -> scaleY(v, amt);
+            case Z -> scaleZ(v, amt);
+        };
 
-        return null;
     }
 
     public static Vector scaleX(Vector v, double amt) {
@@ -218,11 +214,7 @@ public class VectorMath {
             if (to.equals(Direction.U) || to.equals(Direction.D)) {
                 return new Vector(1, 0, 0);
             } else {
-                if (current.equals(Direction.N) || current.equals(Direction.S)) {
-                    return Direction.E.toVector();
-                } else {
-                    return Direction.S.toVector();
-                }
+                return Direction.S.toVector();
             }
         }
 
@@ -230,7 +222,7 @@ public class VectorMath {
     }
 
     private static double round(double value, int precision) {
-        return Double.valueOf(Form.f(value, precision));
+        return Double.parseDouble(Form.f(value, precision));
     }
 
     public static Vector clip(Vector v, int decimals) {

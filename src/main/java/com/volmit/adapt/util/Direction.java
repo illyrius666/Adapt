@@ -23,10 +23,7 @@ import org.bukkit.Axis;
 import org.bukkit.block.BlockFace;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Directions
@@ -56,48 +53,15 @@ public enum Direction {
     }
 
     public static Direction getDirection(BlockFace f) {
-        switch (f) {
-            case DOWN:
-                return D;
-            case EAST:
-                return E;
-            case EAST_NORTH_EAST:
-                return E;
-            case EAST_SOUTH_EAST:
-                return E;
-            case NORTH:
-                return N;
-            case NORTH_EAST:
-                return N;
-            case NORTH_NORTH_EAST:
-                return N;
-            case NORTH_NORTH_WEST:
-                return N;
-            case NORTH_WEST:
-                return N;
-            case SELF:
-                return U;
-            case SOUTH:
-                return S;
-            case SOUTH_EAST:
-                return S;
-            case SOUTH_SOUTH_EAST:
-                return S;
-            case SOUTH_SOUTH_WEST:
-                return S;
-            case SOUTH_WEST:
-                return S;
-            case UP:
-                return U;
-            case WEST:
-                return W;
-            case WEST_NORTH_WEST:
-                return W;
-            case WEST_SOUTH_WEST:
-                return W;
-        }
+        return switch (f) {
+            case DOWN -> D;
+            case EAST, EAST_SOUTH_EAST, EAST_NORTH_EAST -> E;
+            case NORTH, NORTH_WEST, NORTH_NORTH_WEST, NORTH_NORTH_EAST, NORTH_EAST -> N;
+            case SELF, UP -> U;
+            case SOUTH, SOUTH_WEST, SOUTH_SOUTH_WEST, SOUTH_SOUTH_EAST, SOUTH_EAST -> S;
+            case WEST, WEST_SOUTH_WEST, WEST_NORTH_WEST -> W;
+        };
 
-        return D;
     }
 
     public static Direction closest(Vector v) {
@@ -212,7 +176,7 @@ public enum Direction {
 
         for (Direction i : udnews()) {
             for (Direction j : udnews()) {
-                GBiset<Direction, Direction> b = new GBiset<Direction, Direction>(i, j);
+                GBiset<Direction, Direction> b = new GBiset<>(i, j);
 
                 if (i.equals(j)) {
                     permute.put(b, new DOP("DIRECT") {
@@ -221,7 +185,7 @@ public enum Direction {
                             return v;
                         }
                     });
-                } else if (i.reverse().equals(j)) {
+                } else if (Objects.requireNonNull(i.reverse()).equals(j)) {
                     if (i.isVertical()) {
                         permute.put(b, new DOP("R180CCZ") {
                             @Override
@@ -293,22 +257,15 @@ public enum Direction {
 
     @Override
     public String toString() {
-        switch (this) {
-            case D:
-                return "Down";
-            case E:
-                return "East";
-            case N:
-                return "North";
-            case S:
-                return "South";
-            case U:
-                return "Up";
-            case W:
-                return "West";
-        }
+        return switch (this) {
+            case D -> "Down";
+            case E -> "East";
+            case N -> "North";
+            case S -> "South";
+            case U -> "Up";
+            case W -> "West";
+        };
 
-        return "?";
     }
 
     public boolean isVertical() {
@@ -340,24 +297,15 @@ public enum Direction {
     }
 
     public Direction reverse() {
-        switch (this) {
-            case D:
-                return U;
-            case E:
-                return W;
-            case N:
-                return S;
-            case S:
-                return N;
-            case U:
-                return D;
-            case W:
-                return E;
-            default:
-                break;
-        }
+        return switch (this) {
+            case D -> U;
+            case E -> W;
+            case N -> S;
+            case S -> N;
+            case U -> D;
+            case W -> E;
+        };
 
-        return null;
     }
 
     public int x() {
@@ -382,61 +330,35 @@ public enum Direction {
      * @return the byte value
      */
     public byte byteValue() {
-        switch (this) {
-            case D:
-                return 0;
-            case E:
-                return 5;
-            case N:
-                return 2;
-            case S:
-                return 3;
-            case U:
-                return 1;
-            case W:
-                return 4;
-            default:
-                break;
-        }
+        return switch (this) {
+            case D -> 0;
+            case E -> 5;
+            case N -> 2;
+            case S -> 3;
+            case U -> 1;
+            case W -> 4;
+        };
 
-        return -1;
     }
 
     public BlockFace getFace() {
-        switch (this) {
-            case D:
-                return BlockFace.DOWN;
-            case E:
-                return BlockFace.EAST;
-            case N:
-                return BlockFace.NORTH;
-            case S:
-                return BlockFace.SOUTH;
-            case U:
-                return BlockFace.UP;
-            case W:
-                return BlockFace.WEST;
-        }
+        return switch (this) {
+            case D -> BlockFace.DOWN;
+            case E -> BlockFace.EAST;
+            case N -> BlockFace.NORTH;
+            case S -> BlockFace.SOUTH;
+            case U -> BlockFace.UP;
+            case W -> BlockFace.WEST;
+        };
 
-        return null;
     }
 
     public Axis getAxis() {
-        switch (this) {
-            case D:
-                return Axis.Y;
-            case E:
-                return Axis.X;
-            case N:
-                return Axis.Z;
-            case S:
-                return Axis.Z;
-            case U:
-                return Axis.Y;
-            case W:
-                return Axis.X;
-        }
+        return switch (this) {
+            case D, U -> Axis.Y;
+            case E, W -> Axis.X;
+            case N, S -> Axis.Z;
+        };
 
-        return null;
     }
 }

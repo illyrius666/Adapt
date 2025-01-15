@@ -101,33 +101,21 @@ public class MathHelper {
     }
 
     public static int clamp(int var0, int var1, int var2) {
-        if (var0 < var1) {
-            return var1;
-        }
-        if (var0 > var2) {
-            return var2;
-        }
-        return var0;
+        return a(var0, var1, var2);
     }
 
     public static float a(float var0, float var1, float var2) {
         if (var0 < var1) {
             return var1;
         }
-        if (var0 > var2) {
-            return var2;
-        }
-        return var0;
+        return Math.min(var0, var2);
     }
 
     public static double a(double var0, double var2, double var4) {
         if (var0 < var2) {
             return var2;
         }
-        if (var0 > var4) {
-            return var4;
-        }
-        return var0;
+        return Math.min(var0, var4);
     }
 
     public static double b(double var0, double var2, double var4) {
@@ -147,7 +135,7 @@ public class MathHelper {
         if (var2 < 0.0) {
             var2 = -var2;
         }
-        return var0 > var2 ? var0 : var2;
+        return Math.max(var0, var2);
     }
 
     public static int a(int var0, int var1) {
@@ -293,7 +281,7 @@ public class MathHelper {
     }
 
     public static long c(int var0, int var1, int var2) {
-        long var3 = (long) (var0 * 3129871) ^ (long) var2 * 116129781L ^ (long) var1;
+        long var3 = (var0 * 3129871L) ^ (long) var2 * 116129781L ^ (long) var1;
         var3 = var3 * var3 * 42317861L + var3 * 11L;
         return var3 >> 16;
     }
@@ -344,7 +332,7 @@ public class MathHelper {
         double var14 = f[var13];
         double var16 = g[var13];
         double var18 = var11 - e;
-        double var20 = var0 * var16 - (var2 *= var9) * var18;
+        double var20 = var0 * var16 - var2 * var9 * var18;
         double var22 = (6.0 + var20 * var20) * var20 * 0.16666666666666666;
         double var24 = var14 + var22;
         if (var8) {

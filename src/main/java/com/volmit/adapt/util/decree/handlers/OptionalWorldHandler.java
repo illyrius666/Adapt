@@ -21,12 +21,8 @@ package com.volmit.adapt.util.decree.handlers;
 
 import com.volmit.adapt.util.collection.KList;
 import com.volmit.adapt.util.decree.DecreeParameterHandler;
-import com.volmit.adapt.util.decree.exceptions.DecreeParsingException;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class OptionalWorldHandler implements DecreeParameterHandler<String> {
     @Override
@@ -47,7 +43,7 @@ public class OptionalWorldHandler implements DecreeParameterHandler<String> {
     }
 
     @Override
-    public String parse(String in, boolean force) throws DecreeParsingException {
+    public String parse(String in, boolean force) {
         return in;
     }
 

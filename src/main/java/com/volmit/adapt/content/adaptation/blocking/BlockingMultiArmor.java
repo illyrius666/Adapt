@@ -41,6 +41,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class BlockingMultiArmor extends SimpleAdaptation<BlockingMultiArmor.Config> {
@@ -74,7 +75,7 @@ public class BlockingMultiArmor extends SimpleAdaptation<BlockingMultiArmor.Conf
 
     @Override
     public boolean isEnabled() {
-        return getConfig().enabled;
+        return !getConfig().enabled;
     }
 
     @Override
@@ -132,22 +133,21 @@ public class BlockingMultiArmor extends SimpleAdaptation<BlockingMultiArmor.Conf
                 for (ItemStack i : drops) {
                     Damageable iDmgable = (Damageable) i.getItemMeta();
                     if (i.hasItemMeta()) {
-                        ItemMeta im = i.getItemMeta().clone();
-                        ItemMeta im2 = im;
+                        ItemMeta im = Objects.requireNonNull(i.getItemMeta()).clone();
                         if (im.hasDisplayName()) {
-                            im2.setDisplayName(im.getDisplayName());
+                            im.setDisplayName(im.getDisplayName());
                         }
                         if (im.hasEnchants()) {
                             Map<Enchantment, Integer> enchants = im.getEnchants();
                             for (Enchantment enchant : enchants.keySet()) {
-                                im2.addEnchant(enchant, enchants.get(enchant), true);
+                                im.addEnchant(enchant, enchants.get(enchant), true);
                             }
                         }
                         if (iDmgable != null && iDmgable.hasDamage()) {
-                            ((Damageable) im2).setDamage(iDmgable.getDamage());
+                            ((Damageable) im).setDamage(iDmgable.getDamage());
                         }
-                        im2.setLore(null);
-                        i.setItemMeta(im2);
+                        im.setLore(null);
+                        i.setItemMeta(im);
                     }
                     drops.set(drops.indexOf(i), i);
                 }
@@ -174,7 +174,7 @@ public class BlockingMultiArmor extends SimpleAdaptation<BlockingMultiArmor.Conf
                 && e.getClickedInventory().getItem(e.getSlot()) != null
                 && e.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY)) {
             ItemStack cursor = e.getWhoClicked().getItemOnCursor().clone();
-            ItemStack clicked = e.getClickedInventory().getItem(e.getSlot()).clone();
+            ItemStack clicked = Objects.requireNonNull(e.getClickedInventory().getItem(e.getSlot())).clone();
 
             if (cursor.getType().equals(Material.ELYTRA) || clicked.getType().equals(Material.ELYTRA)) { // One must be an ELYTRA
 
@@ -225,12 +225,12 @@ public class BlockingMultiArmor extends SimpleAdaptation<BlockingMultiArmor.Conf
 
     @NoArgsConstructor
     protected static class Config {
-        boolean permanent = false;
-        boolean enabled = true;
-        int baseCost = 1;
-        int initialCost = 3;
-        double costFactor = 1;
-        int maxLevel = 1;
-        int startingSlots = 1;
+        final boolean permanent = false;
+        final boolean enabled = true;
+        final int baseCost = 1;
+        final int initialCost = 3;
+        final double costFactor = 1;
+        final int maxLevel = 1;
+        final int startingSlots = 1;
     }
 }

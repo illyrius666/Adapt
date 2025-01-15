@@ -29,6 +29,7 @@ import org.bukkit.scoreboard.Team;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -49,7 +50,6 @@ public class Board {
 
     private final Player player;
     private final Objective objective;
-    private final Team team;
     @Setter
     private BoardSettings boardSettings;
     private boolean ready;
@@ -59,12 +59,12 @@ public class Board {
         this.player = player;
         this.boardSettings = boardSettings;
         this.objective = this.getScoreboard().getObjective("board") == null ? this.getScoreboard().registerNewObjective("board", "dummy") : this.getScoreboard().getObjective("board");
-        this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        this.team = this.getScoreboard().getTeam("board") == null ? this.getScoreboard().registerNewTeam("board") : this.getScoreboard().getTeam("board");
-        this.team.setAllowFriendlyFire(true);
-        this.team.setCanSeeFriendlyInvisibles(false);
-        this.team.setPrefix("");
-        this.team.setSuffix("");
+        Objects.requireNonNull(this.objective).setDisplaySlot(DisplaySlot.SIDEBAR);
+        Team team = this.getScoreboard().getTeam("board") == null ? this.getScoreboard().registerNewTeam("board") : this.getScoreboard().getTeam("board");
+        Objects.requireNonNull(team).setAllowFriendlyFire(true);
+        team.setCanSeeFriendlyInvisibles(false);
+        team.setPrefix("");
+        team.setSuffix("");
         this.ready = true;
     }
 
@@ -143,6 +143,6 @@ public class Board {
 
     public void resetScoreboard() {
         ready = false;
-        player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+        player.setScoreboard(Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard());
     }
 }

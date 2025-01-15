@@ -37,12 +37,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.util.Vector;
 
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class DiscoveryArmor extends SimpleAdaptation<DiscoveryArmor.Config> {
     private static final UUID MODIFIER = UUID.nameUUIDFromBytes("adapt-discovery-armor".getBytes());
-    private static final NamespacedKey MODIFIER_KEY = NamespacedKey.fromString( "adapt:discovery-armor");
+    private static final NamespacedKey MODIFIER_KEY = NamespacedKey.fromString("adapt:discovery-armor");
     private static final long UPDATE_COOLDOWN = TimeUnit.SECONDS.toMillis(3);
     private static final Sphere SPHERE = new Sphere(5);
 
@@ -94,7 +95,7 @@ public class DiscoveryArmor extends SimpleAdaptation<DiscoveryArmor.Config> {
             if (a > 2 && M.r(0.005 * a)) {
                 Vector v = VectorMath.directionNoNormal(l, b.getLocation().add(0.5, 0.5, 0.5));
                 if (getConfig().showParticles) {
-                    l.getWorld().spawnParticle(Particles.ENCHANTMENT_TABLE, l.clone().add(0, 1, 0), 0, v.getX(), v.getY(), v.getZ());
+                    Objects.requireNonNull(l.getWorld()).spawnParticle(Particles.ENCHANTMENT_TABLE, l.clone().add(0, 1, 0), 0, v.getX(), v.getY(), v.getZ());
                 }
             }
         }
@@ -157,7 +158,7 @@ public class DiscoveryArmor extends SimpleAdaptation<DiscoveryArmor.Config> {
 
     @Override
     public boolean isEnabled() {
-        return getConfig().enabled;
+        return !getConfig().enabled;
     }
 
     @Override
@@ -167,14 +168,14 @@ public class DiscoveryArmor extends SimpleAdaptation<DiscoveryArmor.Config> {
 
     @NoArgsConstructor
     protected static class Config {
-        public int radiusFactor = 3;
-        public double strengthExponent = 1.25;
-        public boolean showParticles = true;
-        boolean permanent = false;
-        boolean enabled = true;
-        int baseCost = 2;
-        int initialCost = 3;
-        double costFactor = 0.3;
-        int maxLevel = 3;
+        public final int radiusFactor = 3;
+        public final double strengthExponent = 1.25;
+        public final boolean showParticles = true;
+        final boolean permanent = false;
+        final boolean enabled = true;
+        final int baseCost = 2;
+        final int initialCost = 3;
+        final double costFactor = 0.3;
+        final int maxLevel = 3;
     }
 }

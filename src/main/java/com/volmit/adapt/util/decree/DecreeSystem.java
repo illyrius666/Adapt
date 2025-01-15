@@ -31,7 +31,6 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import static art.arcane.amulet.MagicalSugar.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,14 +64,14 @@ public interface DecreeSystem extends CommandExecutor, TabCompleter {
             }
         }
 
-        flat = new StringBuilder(flat.length() > 0 ? trim ? flat.toString().trim().length() > 0 ? flat.substring(1).trim() : flat.toString().trim() : flat.substring(1) : flat);
+        flat = new StringBuilder(!flat.isEmpty() ? trim ? !flat.toString().trim().isEmpty() ? flat.substring(1).trim() : flat.toString().trim() : flat.substring(1) : flat);
         StringBuilder arg = new StringBuilder();
         boolean quoting = false;
 
         for (int x = 0; x < flat.length(); x++) {
             char i = flat.charAt(x);
             char j = x < flat.length() - 1 ? flat.charAt(x + 1) : i;
-            boolean hasNext = x < flat.length();
+            boolean hasNext = true;
 
             if (i == ' ' && !quoting) {
                 if (!arg.toString().trim().isEmpty() && trim) {
@@ -80,17 +79,12 @@ public interface DecreeSystem extends CommandExecutor, TabCompleter {
                     arg = new StringBuilder();
                 }
             } else if (i == '"') {
-                if (!quoting && (arg.length() == 0)) {
+                if (!quoting && (arg.isEmpty())) {
                     quoting = true;
                 } else if (quoting) {
                     quoting = false;
 
-                    if (hasNext && j == ' ') {
-                        if (!arg.toString().trim().isEmpty() && trim) {
-                            a.add(arg.toString().trim());
-                            arg = new StringBuilder();
-                        }
-                    } else if (!hasNext) {
+                    if (j == ' ') {
                         if (!arg.toString().trim().isEmpty() && trim) {
                             a.add(arg.toString().trim());
                             arg = new StringBuilder();

@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static xyz.xenondevs.particle.utils.MathUtils.RANDOM;
 
@@ -39,7 +40,7 @@ public class RangedArrowRecovery extends SimpleAdaptation<RangedArrowRecovery.Co
     @EventHandler
     public void onEntityShootBow(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player player && hasAdaptation(player)) {
-            if (!event.getBow().containsEnchantment(Enchantments.ARROW_INFINITE)) {
+            if (!Objects.requireNonNull(event.getBow()).containsEnchantment(Enchantments.ARROW_INFINITE)) {
                 if (event.getProjectile() instanceof Arrow arrow) {
                     shotArrows.put(arrow, player);
                 }
@@ -70,7 +71,7 @@ public class RangedArrowRecovery extends SimpleAdaptation<RangedArrowRecovery.Co
 
     @Override
     public boolean isEnabled() {
-        return getConfig().enabled;
+        return !getConfig().enabled;
     }
 
     @Override
@@ -90,12 +91,12 @@ public class RangedArrowRecovery extends SimpleAdaptation<RangedArrowRecovery.Co
 
     @NoArgsConstructor
     protected static class Config {
-        boolean permanent = false;
-        boolean enabled = true;
-        int baseCost = 5;
-        int maxLevel = 8;
-        int initialCost = 5;
-        double costFactor = 1.10;
-        double[] hitChance = {10, 20, 30, 40, 50, 60, 70, 80};
+        final boolean permanent = false;
+        final boolean enabled = true;
+        final int baseCost = 5;
+        final int maxLevel = 8;
+        final int initialCost = 5;
+        final double costFactor = 1.10;
+        final double[] hitChance = {10, 20, 30, 40, 50, 60, 70, 80};
     }
 }
